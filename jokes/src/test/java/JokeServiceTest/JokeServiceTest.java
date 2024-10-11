@@ -40,12 +40,12 @@ class JokeServiceTest {
 
     @Test
     void testFetchAndSaveJokes() {
-        Joke joke = new Joke(); // Ensure a no-arg constructor is available
+        Joke joke = new Joke(); 
         joke.setId(1L);
         joke.setSetup("Why did the chicken cross the road?");
         joke.setPunchline("To get to the other side!");
 
-        // Mock WebClient response
+    
         when(webClient.get()).thenReturn(mock(WebClient.RequestHeadersUriSpec.class));
         when(webClient.get().uri(any(String.class)).retrieve()).thenReturn(mock(WebClient.ResponseSpec.class));
         when(webClient.get().uri(any(String.class)).retrieve().bodyToMono(Joke.class)).thenReturn(Mono.just(joke));
@@ -64,7 +64,7 @@ class JokeServiceTest {
 
     @Test
     void testGetSavedJokes() {
-        Joke joke = new Joke(); // Ensure a no-arg constructor is available
+        Joke joke = new Joke();
         joke.setId(1L);
         joke.setSetup("Why did the chicken cross the road?");
         joke.setPunchline("To get to the other side!");
