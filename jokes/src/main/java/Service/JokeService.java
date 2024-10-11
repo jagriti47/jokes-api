@@ -16,7 +16,7 @@ public class JokeService {
     private final WebClient webClient;
 
     @Autowired
-    public JokeService(JokeRepository jokeRepository, WebClient.Builder webClientBuilder) { 
+    public JokeService(JokeRepository jokeRepository, WebClient.Builder webClientBuilder) {
         this.jokeRepository = jokeRepository;
         this.webClient = webClientBuilder.baseUrl("https://official-joke-api.appspot.com").build();
     }

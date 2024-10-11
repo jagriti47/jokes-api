@@ -42,6 +42,11 @@ public class Joke {
 		this.setup = setup;
 		this.punchline = punchline;
 	}
+
+	public Joke() {
+		super();
+	}
+	
     
 }
 

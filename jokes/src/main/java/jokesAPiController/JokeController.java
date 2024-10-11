@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import DTO.JokeResponseDTO;
 import Service.JokeService;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @RestController
 public class JokeController {
@@ -24,7 +25,10 @@ public class JokeController {
 
     @GetMapping("/jokes")
     public Flux<Object> getJokes(@RequestParam int count) {
-        return jokeService.fetchAndSaveJokes(count);
+        return jokeService.fetchAndSaveJokes(count)
+            .onErrorResume(ex -> {
+                return Mono.just(new JokeResponseDTO(null, "Error occurred", ex.getMessage()));
+            });
     }
 
     @GetMapping("/jokes/saved")
