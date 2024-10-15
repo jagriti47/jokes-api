@@ -48,7 +48,6 @@ class JokesAPIServiceTest {
 
     @Test
     void testFetchAndSaveJokes_Success() {
-        // Arrange
         int count = 10;
         JokeAPIResponseDTO jokeAPIResponseDTO = new JokeAPIResponseDTO(1,"Setup", "Punchline");
         JokeResponseDTO savedJokeResponseDTO = new JokeResponseDTO(1, "Setup", "Punchline");
@@ -59,17 +58,15 @@ class JokesAPIServiceTest {
         when(responseSpec.bodyToMono(JokeResponseDTO.class)).thenReturn(Mono.just(savedJokeResponseDTO));
         when(jokesDBService.saveJoke(any(Joke.class))).thenReturn(Mono.just(savedJokeResponseDTO));
 
-        // Act
         Flux<JokeResponseDTO> result = jokesAPIService.fetchAndSaveJokes(count);
 
-        // Assert
         assertEquals(1, result.count().block());
         verify(jokesDBService, times(1)).saveJoke(any(Joke.class));
     }
 
     @Test
     void testFetchAndSaveJokes_FetchError() {
-        // Arrange
+       
         int count = 10;
 
         when(requestHeadersUriSpec.uri("/random_joke")).thenReturn(requestHeadersUriSpec);
@@ -77,10 +74,8 @@ class JokesAPIServiceTest {
         when(responseSpec.onStatus(any(), any())).thenThrow(new WebClientResponseException(
                 HttpStatus.NOT_FOUND.value(), "Not Found", null, null, null));
 
-        // Act
         Flux<JokeResponseDTO> result = jokesAPIService.fetchAndSaveJokes(count);
 
-        // Assert
         result.subscribe(jokeResponse -> {
             assertEquals(0, jokeResponse.getId());
             assertEquals("Error fetching joke", jokeResponse.getSetup());
@@ -89,7 +84,7 @@ class JokesAPIServiceTest {
 
     @Test
     void testFetchAndSaveJokes_SaveError() {
-        // Arrange
+        
         int count = 10;
         JokeAPIResponseDTO jokeAPIResponseDTO = new JokeAPIResponseDTO(1,"Setup", "Punchline");
         JokeResponseDTO savedJokeResponseDTO = new JokeResponseDTO(1, "Setup", "Punchline");
@@ -99,10 +94,9 @@ class JokesAPIServiceTest {
         when(responseSpec.bodyToMono(JokeResponseDTO.class)).thenReturn(Mono.just(savedJokeResponseDTO));
         when(jokesDBService.saveJoke(any(Joke.class))).thenReturn(Mono.error(new RuntimeException("Database error")));
 
-        // Act
+     
         Flux<JokeResponseDTO> result = jokesAPIService.fetchAndSaveJokes(count);
 
-        // Assert
         result.subscribe(jokeResponse -> {
             assertEquals(0, jokeResponse.getId());
             assertEquals("Error saving joke", jokeResponse.getSetup());
