@@ -38,7 +38,6 @@ class JokesControllerTest {
 
     @Test
     void testGetJokes_Success() {
-        // Arrange
         JokeAPIResponseDTO jokeResponse = new JokeAPIResponseDTO(1, "Setup", "Punchline");
         Flux<JokeAPIResponseDTO> jokeFlux = Flux.just(jokeResponse);
         JokeResponseDTO jokeResponseDTO=new JokeResponseDTO(1,"question","answer");
@@ -47,19 +46,19 @@ class JokesControllerTest {
         when(jokesAPIService.fetchAndSaveJokes(anyInt())).thenReturn(jokeResponseFlux);
         when(jokesAPIService.getAllSavedJokes()).thenReturn(jokeFlux);
 
-        // Act & Assert
+       
         webTestClient.get()
             .uri("/jokes?count=5")
             .exchange()
             .expectStatus().isOk()
             .expectBodyList(JokeAPIResponseDTO.class)
-            .hasSize(1) // Assuming only one joke in the mock
+            .hasSize(1) 
             .contains(jokeResponse);
     }
 
     @Test
     void testGetJokes_InvalidCount_LessThanOne() {
-        // Act & Assert
+        
         webTestClient.get()
             .uri("/jokes?count=0")
             .exchange()
@@ -73,7 +72,7 @@ class JokesControllerTest {
 
     @Test
     void testGetJokes_InvalidCount_MoreThanHundred() {
-        // Act & Assert
+        
         webTestClient.get()
             .uri("/jokes?count=101")
             .exchange()
